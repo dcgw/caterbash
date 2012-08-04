@@ -11,14 +11,23 @@ class Game extends Playfield {
         super();
 
         caterpillars = [];
-        for (i in 5...26) {
+        for (i in 0...100) {
             var caterpillar:Caterpillar = null;
-            for (j in 0...i) {
-                var index = i - j - 1;
+            var length = 3 + Std.int(i/6);
+            for (j in 0...length) {
+                var index = length - j - 1;
                 caterpillar = new Caterpillar(caterpillar, index);
                 addEntity(caterpillar);
             }
             caterpillars.push(caterpillar);
         }
+    }
+
+    override public function update(frame:Int) {
+        if (frame % 120 == 0) {
+            caterpillars[Std.int(frame/120)].start();
+        }
+
+        super.update(frame);
     }
 }

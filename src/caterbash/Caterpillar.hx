@@ -22,6 +22,9 @@ class Caterpillar extends Entity {
         this.tail = tail;
         isHead = index == 0;
 
+        active = false;
+        visible = false;
+
         var image = if (isHead) new Image(Assets.getBitmapData("assets/Caterhead.png"));
         else if (index % 2 == 1) new Image(Assets.getBitmapData("assets/Caterbody1.png"));
         else new Image(Assets.getBitmapData("assets/Caterbody2.png"));
@@ -40,6 +43,27 @@ class Caterpillar extends Entity {
         randomDirection();
     }
 
+    public function start() {
+        active = true;
+        visible = true;
+        randomStartPosition();
+        randomDirection();
+        var node = this;
+        while ((node = node.tail) != null) {
+            node.x = x;
+            node.y = y;
+            node.randomDirection();
+            node.active = true;
+            node.visible = true;
+        }
+    }
+
+    public function die() {
+        active = false;
+        visible = false;
+        tail.isHead = true;
+    }
+
     override public function update(frame:Int) {
         if (!isHead) {
             return;
@@ -56,13 +80,21 @@ class Caterpillar extends Entity {
             prevNode = node;
         }
 
+        if (x < 16 || x > Main.WIDTH - 16) {
+            velocity.x = -velocity.x;
+        }
+
+        if (y > Main.HEIGHT - 16) {
+            velocity.y = -velocity.y;
+        }
+
         x += velocity.x;
         y += velocity.y;
     }
 
     function randomStartPosition() {
         y = -32;
-        x = Math.random() * Main.WIDTH;
+        x = 32 + Math.random() * (Main.WIDTH - 64);
 
         for (position in previousPositions) {
             position.x = x;

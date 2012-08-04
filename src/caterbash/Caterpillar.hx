@@ -1,5 +1,6 @@
 package caterbash;
 
+import hopscotch.collision.CircleMask;
 import hopscotch.math.VectorMath;
 import flash.geom.Point;
 import nme.installer.Assets;
@@ -9,7 +10,7 @@ import hopscotch.Entity;
 class Caterpillar extends Entity {
     static inline var NUM_PREVIOUS_POSITIONS = 12;
 
-    var tail:Caterpillar;
+    public var tail:Caterpillar;
     var isHead:Bool;
     var velocity:Point;
 
@@ -41,6 +42,8 @@ class Caterpillar extends Entity {
         velocity = new Point();
         randomStartPosition();
         randomDirection();
+
+        collisionMask = new CircleMask(0, 0, 16);
     }
 
     public function start() {
@@ -61,7 +64,9 @@ class Caterpillar extends Entity {
     public function die() {
         active = false;
         visible = false;
-        tail.isHead = true;
+        if (tail != null) {
+            tail.isHead = true;
+        }
     }
 
     override public function update(frame:Int) {
@@ -71,7 +76,7 @@ class Caterpillar extends Entity {
 
         var node:Caterpillar;
         var prevNode = this;
-        while ((node = prevNode.tail) != null) {
+        while (prevNode.active && (node = prevNode.tail) != null) {
             node.x = prevNode.previousPositions[prevNode.previousPositionIndex].x;
             node.y = prevNode.previousPositions[prevNode.previousPositionIndex].y;
             prevNode.previousPositions[prevNode.previousPositionIndex].x = prevNode.x;

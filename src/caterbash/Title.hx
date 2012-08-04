@@ -20,7 +20,7 @@ class Title extends Playfield {
     }
 
     override public function update(frame:Int) {
-        if (startButton.pressed) {
+        if (startButton.justPressed) {
             onPlay();
         }
     }

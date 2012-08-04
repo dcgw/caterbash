@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <set name="WIDTH" value="640"/>
+  <set name="HEIGHT" value="480"/>
+
+  <haxedef name="fdb" if="target_flash" />
+
+  <app file="caterbash"
+       title="Caterbash"
+       package="net.noiseinstitute.caterbash"
+       version="0"
+       company="Daniel Cassidy"
+       main="caterbash.Main"/>
+
+  <window width="${WIDTH}"
+          height="${HEIGHT}"
+          orientation="landscape"
+          fps="60"
+          background="0x000000"
+          resizable="true"
+          hardware="false"/>
+
+  <classpath name="src"/>
+  <classpath name="lib/hopscotch/src"/>
+
+  <assets path="assets" include="*.png"/>
+  <assets path="assets" include="*.ttf"/>
+  <assets path="assets" include="*.mp3"/>
+
+  <haxelib name="nme"/>
+
+  <ndll name="std"/>
+  <ndll name="nme" haxelib="nme"/>
+</project>

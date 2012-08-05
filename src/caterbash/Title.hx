@@ -10,13 +10,15 @@ class Title extends Playfield {
 
     public var onPlay:Void->Void;
 
-    public function new(startButton:Button) {
+    public function new(startButton:Button, score:Score) {
         super();
 
         this.startButton = startButton;
 
         var graphic = new Image(Assets.getBitmapData("assets/Title.png"));
         addGraphic(graphic);
+
+        addEntity(score);
     }
 
     override public function update(frame:Int) {

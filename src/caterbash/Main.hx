@@ -15,11 +15,15 @@ class Main {
         var fireButton = keyboard.buttonForKey(Key.X);
 
         var engine = new Engine(flash.Lib.current, WIDTH, HEIGHT, LOGIC_RATE);
+        engine.console.enabled = false;
+
         engine.inputs.push(joystick);
         engine.inputs.push(fireButton);
 
-        var title = new Title(fireButton);
-        var game = new Game(joystick, fireButton);
+        var score = new Score();
+
+        var title = new Title(fireButton, score);
+        var game = new Game(joystick, fireButton, score);
         var gameOver = new GameOver(fireButton);
 
         title.onPlay = function() {

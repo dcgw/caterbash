@@ -17,6 +17,8 @@ class Game extends Playfield {
 
     var fireButton:Button;
 
+    var score:Score;
+
     var ship:Ship;
     var shipAsplosion:Asplosion;
 
@@ -36,10 +38,12 @@ class Game extends Playfield {
     var laser:Sound;
     var laserSoundTransform:SoundTransform;
 
-    public function new(joystick:Joystick, fireButton:Button) {
+    public function new(joystick:Joystick, fireButton:Button, score:Score) {
         super();
 
         this.fireButton = fireButton;
+
+        this.score = score;
 
         counter = 0;
         caterpillarInterval = 60;
@@ -78,6 +82,8 @@ class Game extends Playfield {
         asplode = Assets.getSound("assets/Asplode.mp3");
         laser = Assets.getSound("assets/Laser.mp3");
         laserSoundTransform = new SoundTransform(0.2);
+
+        addEntity(score);
     }
 
     override public function begin(frame:Int) {
@@ -94,6 +100,8 @@ class Game extends Playfield {
         ship.visible = true;
 
         lastShotFrame = 0;
+
+        score.reset();
     }
 
     override public function update(frame:Int) {
@@ -109,6 +117,7 @@ class Game extends Playfield {
                             crunch.play();
                             caterpillar.die();
                             shot.destroy();
+                            score.score(100);
                             break;
                         }
                     }

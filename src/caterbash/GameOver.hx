@@ -3,15 +3,20 @@ package caterbash;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import nme.installer.Assets;
+import hopscotch.input.digital.Button;
 import hopscotch.graphics.Image;
 import hopscotch.Playfield;
 import hopscotch.graphics.Text;
 
 class GameOver extends Playfield {
+    static inline var SKIP_PREVENTION_DELAY = 30;
+
     static inline var INTERVAL = 30;
     static inline var MAX_REMEMBRANCES_ON_SCREEN = 25;
 
     public var onDone:Void->Void;
+
+    var skipButton:Button;
 
     var names:Array<String>;
     var numRemembrances:Int;
@@ -22,8 +27,10 @@ class GameOver extends Playfield {
 
     var counter:Int;
 
-    public function new() {
+    public function new(skipButton:Button) {
         super();
+
+        this.skipButton = skipButton;
 
         music = Assets.getSound("assets/Remembrance.mp3");
         musicChannel = null;
@@ -50,7 +57,9 @@ class GameOver extends Playfield {
     }
 
     override public function update(frame:Int) {
-        if (counter % INTERVAL == 0) {
+        if (skipButton.pressed && counter > SKIP_PREVENTION_DELAY) {
+            onDone();
+        } else if (counter % INTERVAL == 0) {
             var i = Std.int(counter/INTERVAL);
             if (i < numRemembrances) {
                 var remembrance = remembrances[i % MAX_REMEMBRANCES_ON_SCREEN];

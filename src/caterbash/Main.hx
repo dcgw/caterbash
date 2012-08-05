@@ -20,7 +20,7 @@ class Main {
 
         var title = new Title(fireButton);
         var game = new Game(joystick, fireButton);
-        var gameOver = new GameOver();
+        var gameOver = new GameOver(fireButton);
 
         title.onPlay = function() {
             engine.playfield = game;

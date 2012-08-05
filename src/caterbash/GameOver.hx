@@ -30,7 +30,8 @@ class GameOver extends Playfield {
 
         names = ["Dan", "George", "Florian", "Sam", "Terry", "Stephen", "John", "Hayden", "Jasper", "Alan",
                 "Jonathan", "Alistair", "Mark", "Emma", "Perrin", "Melissa", "Alex", "Aubrey", "Ed", "Tom",
-                "Craig", "Phil", "Michael", "Bennett", "Laika", "Tracy", "Zayne", "Christer", "Harry"];
+                "Craig", "Phil", "Michael", "Bennett", "Laika", "Tracy", "Zayne", "Christer", "Harry",
+                "Hannah", "Florence"];
         numRemembrances = 0;
 
         remembrances = [];

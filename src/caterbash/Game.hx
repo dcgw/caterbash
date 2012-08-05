@@ -1,5 +1,8 @@
 package caterbash;
 
+import flash.media.Sound;
+import flash.media.SoundTransform;
+import nme.installer.Assets;
 import hopscotch.input.analogue.Joystick;
 import hopscotch.input.digital.Button;
 import hopscotch.Playfield;
@@ -27,6 +30,11 @@ class Game extends Playfield {
 
     var shots:Array<Shot>;
     var shotIndex:Int;
+
+    var crunch:Sound;
+    var asplode:Sound;
+    var laser:Sound;
+    var laserSoundTransform:SoundTransform;
 
     public function new(joystick:Joystick, fireButton:Button) {
         super();
@@ -65,6 +73,11 @@ class Game extends Playfield {
         shipAsplosion.onDone = function() {
             onGameOver();
         }
+
+        crunch = Assets.getSound("assets/Crunch.mp3");
+        asplode = Assets.getSound("assets/Asplode.mp3");
+        laser = Assets.getSound("assets/Laser.mp3");
+        laserSoundTransform = new SoundTransform(0.2);
     }
 
     override public function begin(frame:Int) {
@@ -93,6 +106,7 @@ class Game extends Playfield {
                             if (caterpillar.isOriginalHead) {
                                 onCaterdeath();
                             }
+                            crunch.play();
                             caterpillar.die();
                             shot.destroy();
                             break;
@@ -103,6 +117,7 @@ class Game extends Playfield {
                         ship.active = false;
                         ship.visible = false;
                         shipAsplosion.asplode(ship.x, ship.y);
+                        asplode.play();
                         shipCollision = true;
                         break;
                     }
@@ -132,6 +147,7 @@ class Game extends Playfield {
                 shotIndex = (shotIndex+1) % shots.length;
                 --shotsQueued;
                 lastShotFrame = frame;
+                laser.play(0, 0, laserSoundTransform);
             }
         }
 

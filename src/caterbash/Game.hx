@@ -15,6 +15,7 @@ class Game extends Playfield {
     var fireButton:Button;
 
     var ship:Ship;
+    var shipAsplosion:Asplosion;
 
     var counter:Int;
     var caterpillarInterval:Int;
@@ -57,12 +58,28 @@ class Game extends Playfield {
 
         ship = new Ship(joystick);
         addEntity(ship);
+
+        shipAsplosion = new Asplosion();
+        addEntity(shipAsplosion);
+
+        shipAsplosion.onDone = function() {
+            onGameOver();
+        }
     }
 
     override public function begin(frame:Int) {
+        for (caterpillar in caterpillars) {
+            caterpillar.reset();
+        }
+
         counter = 0;
+
         ship.x = Main.WIDTH * 0.5;
         ship.y = Main.HEIGHT - 48;
+
+        ship.active = true;
+        ship.visible = true;
+
         lastShotFrame = 0;
     }
 
@@ -73,14 +90,19 @@ class Game extends Playfield {
                 if (caterpillar.active) {
                     for (shot in shots) {
                         if (shot.active && caterpillar.collideEntity(shot)) {
+                            if (caterpillar.isOriginalHead) {
+                                onCaterdeath();
+                            }
                             caterpillar.die();
                             shot.destroy();
                             break;
                         }
                     }
 
-                    if (caterpillar.collideEntity(ship)) {
+                    if (ship.active && caterpillar.collideEntity(ship)) {
+                        ship.active = false;
                         ship.visible = false;
+                        shipAsplosion.asplode(ship.x, ship.y);
                         shipCollision = true;
                         break;
                     }

@@ -10,7 +10,9 @@ import hopscotch.Entity;
 class Caterpillar extends Entity {
     static inline var NUM_PREVIOUS_POSITIONS = 12;
 
+    public var isOriginalHead(default, null):Bool;
     public var tail:Caterpillar;
+
     var isHead:Bool;
     var velocity:Point;
 
@@ -21,7 +23,7 @@ class Caterpillar extends Entity {
         super();
 
         this.tail = tail;
-        isHead = index == 0;
+        isHead = isOriginalHead = index == 0;
 
         active = false;
         visible = false;
@@ -40,25 +42,39 @@ class Caterpillar extends Entity {
         previousPositionIndex = 0;
 
         velocity = new Point();
-        randomStartPosition();
-        randomDirection();
 
         collisionMask = new CircleMask(0, 0, 16);
     }
 
+    public function reset() {
+        active = false;
+        visible = false;
+
+        if (tail != null) {
+            tail.reset();
+        }
+    }
+
     public function start() {
-        active = true;
-        visible = true;
-        randomStartPosition();
-        randomDirection();
+        y = -32;
+        x = 32 + Math.random() * (Main.WIDTH - 64);
+
         var node = this;
-        while ((node = node.tail) != null) {
+        do {
             node.x = x;
             node.y = y;
             node.randomDirection();
             node.active = true;
             node.visible = true;
-        }
+            node.isHead = false;
+
+            for (previousPosition in node.previousPositions) {
+                previousPosition.x = x;
+                previousPosition.y = y;
+            }
+        } while ((node = node.tail) != null);
+
+        isHead = true;
     }
 
     public function die() {
@@ -95,16 +111,6 @@ class Caterpillar extends Entity {
 
         x += velocity.x;
         y += velocity.y;
-    }
-
-    function randomStartPosition() {
-        y = -32;
-        x = 32 + Math.random() * (Main.WIDTH - 64);
-
-        for (position in previousPositions) {
-            position.x = x;
-            position.y = y;
-        }
     }
 
     function randomDirection() {

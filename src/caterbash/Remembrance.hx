@@ -18,7 +18,7 @@ class Remembrance extends Entity {
         text.wordWrap = true;
         text.align = TextFormatAlign.CENTER;
         text.fontFace = FontFace.serif;
-        text.fontSize = 40;
+        text.fontSize = 28;
         text.color = 0xffffff;
         graphic = text;
 

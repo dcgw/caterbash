@@ -20,24 +20,28 @@ class GameOver extends Playfield {
     var music:Sound;
     var musicChannel:SoundChannel;
 
+    var counter:Int;
+
     public function new() {
         super();
 
         music = Assets.getSound("assets/Remembrance.mp3");
         musicChannel = null;
 
-        addGraphic(new Image(Assets.getBitmapData("assets/GameOver.png")));
-
         names = ["Dan", "George", "Florian", "Sam", "Terry", "Stephen", "John", "Hayden", "Jasper", "Alan",
                 "Jonathan", "Alistair", "Mark", "Emma", "Perrin", "Melissa", "Alex", "Aubrey", "Ed", "Tom",
                 "Craig", "Phil", "Michael", "Bennett", "Laika", "Tracy", "Zayne", "Christer", "Harry"];
-        numRemembrances = 10;
+        numRemembrances = 0;
 
         remembrances = [];
         for (i in 0...MAX_REMEMBRANCES_ON_SCREEN) {
             remembrances[i] = new Remembrance();
             addEntity(remembrances[i]);
         }
+
+        addGraphic(new Image(Assets.getBitmapData("assets/GameOver.png")));
+
+        counter = 0;
     }
 
     public function addRemembrance() {
@@ -45,18 +49,21 @@ class GameOver extends Playfield {
     }
 
     override public function update(frame:Int) {
-        if (frame % INTERVAL == 0) {
-            var i = Std.int(frame/INTERVAL);
+        if (counter % INTERVAL == 0) {
+            var i = Std.int(counter/INTERVAL);
             if (i < numRemembrances) {
                 var remembrance = remembrances[i % MAX_REMEMBRANCES_ON_SCREEN];
                 remembrance.y = Main.HEIGHT;
                 remembrance.setName(names[Std.int(Math.random() * names.length)] + " the Caterpillar");
                 remembrance.active = true;
                 remembrance.visible = true;
-            } else if (remembrances[(numRemembrances-1) % MAX_REMEMBRANCES_ON_SCREEN].y < -32) {
+            } else if (numRemembrances == 0 ||
+                    remembrances[(numRemembrances-1) % MAX_REMEMBRANCES_ON_SCREEN].y < -32) {
                 onDone();
             }
         }
+
+        ++counter;
 
         super.update(frame);
     }
@@ -65,11 +72,14 @@ class GameOver extends Playfield {
         if (musicChannel == null) {
             musicChannel = music.play(0, 2147483647);
         }
+
+        counter = 0;
     }
 
     override public function end() {
         if (musicChannel != null) {
             musicChannel.stop();
+            musicChannel = null;
         }
 
         for (remembrance in remembrances) {

@@ -28,20 +28,22 @@ class Main {
         var game = new Game(joystick, fireButton, score);
         var gameOver = new GameOver(fireButton);
 
+        var pacifistMode = false;
+
         title.onPlay = function() {
+            pacifistMode = false;
             engine.playfield = game;
         };
         
         title.onPacifism = function() {
-            game.setPacifistMode();
+            pacifistMode = true;
             engine.playfield = game;
         };
 
         game.onCaterdeath = function() {
             gameOver.addRemembrance();
-            if (game.getPacifistMode()) {
-              game.unsetPacifistMode();
-              engine.playfield = gameOver;
+            if (pacifistMode) {
+                engine.playfield = gameOver;
             }
         };
 

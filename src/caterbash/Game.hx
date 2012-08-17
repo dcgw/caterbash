@@ -38,12 +38,8 @@ class Game extends Playfield {
     var laser:Sound;
     var laserSoundTransform:SoundTransform;
 
-    var pacifistMode:Bool;
-
     public function new(joystick:Joystick, fireButton:Button, score:Score) {
         super();
-
-        this.pacifistMode = false;
 
         this.fireButton = fireButton;
 
@@ -89,19 +85,6 @@ class Game extends Playfield {
 
         addEntity(score);
     }
-
-    public function setPacifistMode() {
-      pacifistMode = true;
-    }
-    
-    public function unsetPacifistMode() {
-      pacifistMode = false;
-    }
-
-    public function getPacifistMode() {
-      return pacifistMode;
-    }
-
 
     override public function begin(frame:Int) {
         for (caterpillar in caterpillars) {

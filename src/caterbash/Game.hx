@@ -93,10 +93,15 @@ class Game extends Playfield {
     public function setPacifistMode() {
       pacifistMode = true;
     }
+    
+    public function unsetPacifistMode() {
+      pacifistMode = false;
+    }
 
     public function getPacifistMode() {
       return pacifistMode;
     }
+
 
     override public function begin(frame:Int) {
         for (caterpillar in caterpillars) {

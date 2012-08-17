@@ -40,6 +40,7 @@ class Main {
         game.onCaterdeath = function() {
             gameOver.addRemembrance();
             if (game.getPacifistMode()) {
+              game.unsetPacifistMode();
               engine.playfield = gameOver;
             }
         };

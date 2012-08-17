@@ -13,24 +13,36 @@ class Main {
         var keyboard = new Keyboard();
         var joystick = keyboard.joystickForKeys(Key.Up, Key.Down, Key.Left, Key.Right);
         var fireButton = keyboard.buttonForKey(Key.X);
+        var pacifismButton = keyboard.buttonForKey(Key.P);
 
         var engine = new Engine(flash.Lib.current, WIDTH, HEIGHT, LOGIC_RATE);
         engine.console.enabled = false;
 
         engine.inputs.push(joystick);
         engine.inputs.push(fireButton);
+        engine.inputs.push(pacifismButton);
 
-        var score = new Score();
+        var score = new Score(); 
 
-        var title = new Title(fireButton, score);
+        var title = new Title(fireButton, pacifismButton, score);
         var game = new Game(joystick, fireButton, score);
         var gameOver = new GameOver(fireButton);
 
         title.onPlay = function() {
             engine.playfield = game;
         };
+        
+        title.onPacifism = function() {
+            game.setPacifistMode();
+            engine.playfield = game;
+        };
 
-        game.onCaterdeath = gameOver.addRemembrance;
+        game.onCaterdeath = function() {
+            gameOver.addRemembrance();
+            if (game.getPacifistMode()) {
+              engine.playfield = gameOver;
+            }
+        };
 
         game.onGameOver = function() {
             engine.playfield = gameOver;

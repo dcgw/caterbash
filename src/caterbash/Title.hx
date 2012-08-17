@@ -6,13 +6,13 @@ import hopscotch.graphics.Image;
 import hopscotch.Playfield;
 
 class Title extends Playfield {
-    public var startButton: Button;
-    public var pacifismButton: Button;
+    public var startButton:Button;
+    public var pacifismButton:Button;
 
     public var onPlay:Void->Void;
     public var onPacifism:Void->Void;
 
-    public function new(startButton:Button, pacifismButton: Button, score:Score) {
+    public function new(startButton:Button, pacifismButton:Button, score:Score) {
         super();
 
         this.startButton = startButton;
